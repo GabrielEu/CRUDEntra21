@@ -41,6 +41,9 @@ public class AgenciasDao {
 				// Fechar a conexão
 				pstmt.close();
 
+				// Aviso de cadastro
+				JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "", 0);
+				
 			} catch (Exception e) {
 
 				// Caso haja falhas
@@ -93,5 +96,46 @@ public class AgenciasDao {
 		return modelo;
 
 	}
+	
+	// Método para dados pelo ID
+		public AgenciasBean obterInformacoesDoId(int idAgencia) {
+
+			// Criando um objeto da classe CursosBean
+			AgenciasBean ab = new AgenciasBean();
+
+			// Comando SQL
+			String sql = "SELECT * FROM agencias WHERE id = ?";
+
+			// Tentar realizar o comando SQL
+			try {
+
+				// Enviando os parâmetros
+				PreparedStatement pstmt = this.conexao.prepareStatement(sql);
+				pstmt.setInt(1, idAgencia);
+
+				// Executando e retornando dados
+				ResultSet rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+					ab.setEnderecoAgencia(rs.getString("endereco"));
+					ab.setIdAgencia(rs.getInt("id"));
+					ab.setNomeAgencia(rs.getString("nome"));
+					ab.setTelefoneAgencia(rs.getInt("telefone"));
+				}
+				
+				// Fechar a conexão
+				pstmt.close();
+				
+			} catch (Exception e) {
+
+				// Caso haja falhas
+				JOptionPane.showMessageDialog(null, "Falha ao selecionar os dados" + e.getMessage());
+
+			}
+
+			// Retorno
+			return ab;
+
+		}
 
 }

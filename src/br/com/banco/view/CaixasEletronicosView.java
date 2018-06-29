@@ -3,6 +3,8 @@ package br.com.banco.view;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -52,8 +54,25 @@ public class CaixasEletronicosView {
 
 		// Criar tabela
 		tabela = new JTable(ced.listarAgencias());
-		construtor.getContentPane().add(tabela);
 
+		// Ação da tabela
+		tabela.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+
+				// Obter a linha selecionada
+				int linhaSelecionada = tabela.getSelectedRow();
+				int idCaixaEletronico = (int) tabela.getValueAt(linhaSelecionada, 0);
+
+				// Fechar esse formulário
+				construtor.dispose();
+
+				// Instanciar outro formulário
+				CaixasEletronicosViewAlterar cvc = new CaixasEletronicosViewAlterar(idCaixaEletronico);
+
+			}
+		});
+		
 		// Barra de rolagem
 		JScrollPane barra = new JScrollPane(tabela);
 		barra.setBounds(10, 180, 491, 159);

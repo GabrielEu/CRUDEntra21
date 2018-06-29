@@ -6,7 +6,7 @@ public class ContasBean {
 	private int idPessoa;
 	private String contaCorrente;
 	private int agencia;
-	private int fundos;
+	private double fundos;
 	private String senha;
 	
 	public int getId() {
@@ -33,10 +33,10 @@ public class ContasBean {
 	public void setAgencia(int agencia) {
 		this.agencia = agencia;
 	}
-	public int getFundos() {
+	public double getFundos() {
 		return fundos;
 	}
-	public void setFundos(int fundos) {
+	public void setFundos(double fundos) {
 		this.fundos = fundos;
 	}
 	public String getSenha() {

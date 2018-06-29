@@ -14,85 +14,129 @@ import br.com.banco.connection.ConnectionFactory;
 public class PessoasDao {
 
 	// Atributo para obter conexão
-		private Connection conexao;
+	private Connection conexao;
 
-		// Método para estabelecer conexão com o banco de dados
-		public PessoasDao() {
+	// Método para estabelecer conexão com o banco de dados
+	public PessoasDao() {
 
-			this.conexao = new ConnectionFactory().obterConexao();
+		this.conexao = new ConnectionFactory().obterConexao();
 
-		}
-		
-		// Método para cadastrar agências
-			public void cadastrarPessoas(PessoasBean cb) {
+	}
 
-				// Comando SQL
-				String sql = "INSERT INTO agencias (idAgencia, nome, codigo) VALUES (?, ?, ?)";
+	// Método para cadastrar agências
+	public void cadastrarPessoas(PessoasBean cb) {
 
-				// Tentar realizar o comando SQL
-				try {
+		// Comando SQL
+		String sql = "INSERT INTO pessoas (idAgencia, nome, codigo) VALUES (?, ?, ?)";
 
-					// Enviando e executando os parâmetros
-					PreparedStatement pstmt = this.conexao.prepareStatement(sql);
-					pstmt.setInt(1, cb.getIdAgencia());
-					pstmt.setString(2, cb.getNome());
-					pstmt.setString(3, cb.getCodigo());
-					pstmt.execute();
+		// Tentar realizar o comando SQL
+		try {
 
-					// Fechar a conexão
-					pstmt.close();
+			// Enviando e executando os parâmetros
+			PreparedStatement pstmt = this.conexao.prepareStatement(sql);
+			pstmt.setInt(1, cb.getIdAgencia());
+			pstmt.setString(2, cb.getNome());
+			pstmt.setString(3, cb.getCodigo());
+			pstmt.execute();
 
-				} catch (Exception e) {
+			// Fechar a conexão
+			pstmt.close();
 
-					// Caso haja falhas
-					JOptionPane.showMessageDialog(null, "Falha ao inserir os dados");
+			// Aviso de cadastro
+			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "", 0);
 
-				}
+		} catch (Exception e) {
 
-			}
-
-		// Mètodo para selecionar e listar agências
-		public DefaultTableModel listarAgencias() {
-
-			// Criando o DefaultTableModel
-			DefaultTableModel modelo = new DefaultTableModel();
-
-			// Definir as colunas do DefaultTableModel
-			modelo.addColumn("ID");
-			modelo.addColumn("ID da agência");
-			modelo.addColumn("Nome");
-			modelo.addColumn("Código");
-
-			// Comando SQL
-			String sql = "SELECT * FROM pessoas";
-
-			// Tentar realizar o comando SQL
-			try {
-
-				// Conectar e selecionar o comando SQL
-				java.sql.Statement stmt = conexao.createStatement();
-
-				// Executando comando SQL e obtendo dados
-				ResultSet rs = stmt.executeQuery(sql);
-
-				// Listando cursos
-				while (rs.next()) {
-
-					modelo.addRow(new Object[] { rs.getInt("id"), rs.getInt("idAgencia"), rs.getString("nome"), rs.getString("codigo") });
-				}
-
-				// Fechar a conexão
-				stmt.close();
-
-			} catch (Exception e) {
-
-				// Caso haja falhas na seleção
-				JOptionPane.showMessageDialog(null, "Falha ao selecionar as agências.");
-			}
-
-			// Retornar para o método
-			return modelo;
+			// Caso haja falhas
+			JOptionPane.showMessageDialog(null, "Falha ao inserir os dados");
 
 		}
+
+	}
+
+	// Mètodo para selecionar e listar agências
+	public DefaultTableModel listarAgencias() {
+
+		// Criando o DefaultTableModel
+		DefaultTableModel modelo = new DefaultTableModel();
+
+		// Definir as colunas do DefaultTableModel
+		modelo.addColumn("ID");
+		modelo.addColumn("ID da agência");
+		modelo.addColumn("Nome");
+		modelo.addColumn("Código");
+
+		// Comando SQL
+		String sql = "SELECT * FROM pessoas";
+
+		// Tentar realizar o comando SQL
+		try {
+
+			// Conectar e selecionar o comando SQL
+			java.sql.Statement stmt = conexao.createStatement();
+
+			// Executando comando SQL e obtendo dados
+			ResultSet rs = stmt.executeQuery(sql);
+
+			// Listando cursos
+			while (rs.next()) {
+
+				modelo.addRow(new Object[] { rs.getInt("id"), rs.getInt("idAgencia"), rs.getString("nome"),
+						rs.getString("codigo") });
+			}
+
+			// Fechar a conexão
+			stmt.close();
+
+		} catch (Exception e) {
+
+			// Caso haja falhas na seleção
+			JOptionPane.showMessageDialog(null, "Falha ao selecionar as agências.");
+		}
+
+		// Retornar para o método
+		return modelo;
+
+	}
+
+	// Método para dados pelo ID
+	public PessoasBean obterInformacoesDoId(int idPessoa) {
+
+		// Criando um objeto da classe CursosBean
+		PessoasBean pb = new PessoasBean();
+
+		// Comando SQL
+		String sql = "SELECT * FROM pessoas WHERE id = ?";
+
+		// Tentar realizar o comando SQL
+		try {
+
+			// Enviando os parâmetros
+			PreparedStatement pstmt = this.conexao.prepareStatement(sql);
+			pstmt.setInt(1, idPessoa);
+
+			// Executando e retornando dados
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				pb.setCodigo(rs.getString("codigo"));
+				pb.setIdAgencia(rs.getInt("idAgencia"));
+				pb.setNome(rs.getString("nome"));
+			}
+
+			// Fechar a conexão
+			pstmt.close();
+
+		} catch (Exception e) {
+
+			// Caso haja falhas
+			JOptionPane.showMessageDialog(null, "Falha ao selecionar os dados" + e.getMessage());
+
+		}
+
+		// Retorno
+		return pb;
+
+	}
 
 }

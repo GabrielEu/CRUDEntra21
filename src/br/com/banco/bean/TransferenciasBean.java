@@ -5,7 +5,7 @@ public class TransferenciasBean {
 	private int id;
 	private int remetente;
 	private int destinatario;
-	private int valor;
+	private double valor;
 	private String dataEHora;
 	private int idCaixa;
 	
@@ -27,10 +27,10 @@ public class TransferenciasBean {
 	public void setDestinatario(int destinatario) {
 		destinatario = destinatario;
 	}
-	public int getValor() {
+	public double getValor() {
 		return valor;
 	}
-	public void setValor(int valor) {
+	public void setValor(double valor) {
 		this.valor = valor;
 	}
 	public String getDataEHora() {

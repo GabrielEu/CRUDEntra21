@@ -3,9 +3,9 @@ package br.com.banco.bean;
 public class AgenciasBean {
 
 	private int id;
-	private String nomeAgencia;
-	private String enderecoAgencia;
-	private int telefoneAgencia;
+	private static String nomeAgencia;
+	private static String enderecoAgencia;
+	private static int telefoneAgencia;
 
 	public int getIdAgencia() {
 

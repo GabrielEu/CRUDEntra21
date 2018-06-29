@@ -27,7 +27,7 @@ public class CaixasEletronicosDao {
 	public void cadastrarCaixasEletronicos(CaixasEletronicosBean ceb) {
 
 		// Comando SQL
-		String sql = "INSERT INTO agencias (fundos, idagencia) VALUES (?, ?)";
+		String sql = "INSERT INTO caixaseletronicos (fundos, idagencia) VALUES (?, ?)";
 
 		// Tentar realizar o comando SQL
 		try {
@@ -40,6 +40,9 @@ public class CaixasEletronicosDao {
 
 			// Fechar a conexão
 			pstmt.close();
+
+			// Aviso de cadastro
+			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "", 0);
 
 		} catch (Exception e) {
 
@@ -90,6 +93,45 @@ public class CaixasEletronicosDao {
 
 		// Retornar para o método
 		return modelo;
+
+	}
+
+	// Método para dados pelo ID
+	public CaixasEletronicosBean obterInformacoesDoId(int idCaixaEletronico) {
+
+		// Criando um objeto da classe CursosBean
+		CaixasEletronicosBean ceb = new CaixasEletronicosBean();
+
+		// Comando SQL
+		String sql = "SELECT * FROM caixaseletronicos WHERE id = ?";
+
+		// Tentar realizar o comando SQL
+		try {
+
+			// Enviando os parâmetros
+			PreparedStatement pstmt = this.conexao.prepareStatement(sql);
+			pstmt.setInt(1, idCaixaEletronico);
+
+			// Executando e retornando dados
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				ceb.setFundo(rs.getInt("fundos"));
+				ceb.setIdAgencia(rs.getInt("idAgencia"));
+			}
+
+			// Fechar a conexão
+			pstmt.close();
+
+		} catch (Exception e) {
+
+			// Caso haja falhas
+			JOptionPane.showMessageDialog(null, "Falha ao selecionar os dados" + e.getMessage());
+
+		}
+
+		// Retorno
+		return ceb;
 
 	}
 

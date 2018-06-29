@@ -3,6 +3,8 @@ package br.com.banco.view;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,9 +37,9 @@ public class FuncionariosView {
 		labelIdPessoa.setBounds(24, 26, 75, 14);
 		construtor.getContentPane().add(labelIdPessoa);
 
-		JLabel labelRua = new JLabel("Rua");
-		labelRua.setBounds(225, 26, 71, 14);
-		construtor.getContentPane().add(labelRua);
+		JLabel labelSalario = new JLabel("Salário");
+		labelSalario.setBounds(225, 26, 71, 14);
+		construtor.getContentPane().add(labelSalario);
 
 		JLabel labelSenha = new JLabel("Senha");
 		labelSenha.setBounds(272, 70, 103, 14);
@@ -73,6 +75,24 @@ public class FuncionariosView {
 		// Criar tabela
 		tabela = new JTable(fd.listarAgencias());
 
+		// Ação da tabela
+		tabela.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+
+				// Obter a linha selecionada
+				int linhaSelecionada = tabela.getSelectedRow();
+				int idFuncionario = (int) tabela.getValueAt(linhaSelecionada, 0);
+
+				// Fechar esse formulário
+				construtor.dispose();
+
+				// Instanciar outro formulário
+				FuncionariosViewAlterar fvc = new FuncionariosViewAlterar(idFuncionario);
+
+			}
+		});
+		
 		// Barra de rolagem
 		JScrollPane barra = new JScrollPane(tabela);
 		barra.setBounds(10, 202, 491, 137);
@@ -111,7 +131,7 @@ public class FuncionariosView {
 				campoSalario.setText("");
 				campoSenha.setText("");
 
-				// campoNomeAgencia.requestFocus();
+				campoIdPessoa.requestFocus();
 
 			}
 		});

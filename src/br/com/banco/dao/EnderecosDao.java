@@ -27,7 +27,7 @@ public class EnderecosDao {
 	public void cadastrarEnderecos(EnderecosBean eb) {
 
 		// Comando SQL
-		String sql = "INSERT INTO agencias (idPessoa, rua, numero, bairro, complemento) VALUES (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO enderecos(idPessoa, rua, numero, bairro, complemento) VALUES (?, ?, ?, ?, ?)";
 
 		// Tentar realizar o comando SQL
 		try {
@@ -38,11 +38,14 @@ public class EnderecosDao {
 			pstmt.setString(2, eb.getRua());
 			pstmt.setInt(3, eb.getNumero());
 			pstmt.setString(4, eb.getBairro());
-			pstmt.setString	(5, eb.getComplemento());
+			pstmt.setString(5, eb.getComplemento());
 			pstmt.execute();
 
 			// Fechar a conexão
 			pstmt.close();
+
+			// Aviso de cadastro
+			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "", 0);
 
 		} catch (Exception e) {
 
@@ -97,6 +100,48 @@ public class EnderecosDao {
 
 		// Retornar para o método
 		return modelo;
+
+	}
+
+	// Método para dados pelo ID
+	public EnderecosBean obterInformacoesDoId(int idEndereco) {
+
+		// Criando um objeto da classe CursosBean
+		EnderecosBean eb = new EnderecosBean();
+
+		// Comando SQL
+		String sql = "SELECT * FROM endereco WHERE id = ?";
+
+		// Tentar realizar o comando SQL
+		try {
+
+			// Enviando os parâmetros
+			PreparedStatement pstmt = this.conexao.prepareStatement(sql);
+			pstmt.setInt(1, idEndereco);
+
+			// Executando e retornando dados
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				eb.setBairro(rs.getString("bairro"));
+				eb.setComplemento(rs.getString("complemento"));
+				eb.setIdPessoa(rs.getInt("idPessoa"));
+				eb.setNumero(rs.getInt("numero"));
+				eb.setRua(rs.getString("rua"));
+			}
+
+			// Fechar a conexão
+			pstmt.close();
+
+		} catch (Exception e) {
+
+			// Caso haja falhas
+			JOptionPane.showMessageDialog(null, "Falha ao selecionar os dados" + e.getMessage());
+
+		}
+
+		// Retorno
+		return eb;
 
 	}
 

@@ -3,6 +3,8 @@ package br.com.banco.view;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -51,6 +53,24 @@ public class ContatosView {
 
 		tabela = new JTable(cd.listarAgencias());
 
+		// Ação da tabela
+		tabela.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+
+				// Obter a linha selecionada
+				int linhaSelecionada = tabela.getSelectedRow();
+				int idContato = (int) tabela.getValueAt(linhaSelecionada, 0);
+
+				// Fechar esse formulário
+				construtor.dispose();
+
+				// Instanciar outro formulário
+				ContatosViewAlterar cvc = new ContatosViewAlterar(idContato);
+
+			}
+		});
+		
 		JScrollPane barra = new JScrollPane(tabela);
 		barra.setBounds(10, 180, 491, 159);
 		construtor.getContentPane().add(barra);

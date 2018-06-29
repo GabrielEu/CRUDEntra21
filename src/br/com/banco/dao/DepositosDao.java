@@ -27,7 +27,7 @@ public class DepositosDao {
 	public void cadastrarDepositos(DepositosBean db) {
 
 		// Comando SQL
-		String sql = "INSERT INTO agencias (idConta, valor, idCaixa) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO depositos (idConta, valor, idCaixa) VALUES (?, ?, ?)";
 
 		// Tentar realizar o comando SQL
 		try {
@@ -42,10 +42,13 @@ public class DepositosDao {
 			// Fechar a conexão
 			pstmt.close();
 
+			// Aviso de cadastro
+			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "", 0);
+
 		} catch (Exception e) {
 
 			// Caso haja falhas
-			JOptionPane.showMessageDialog(null, "Falha ao inserir os dados");
+			JOptionPane.showMessageDialog(null, "Falha ao inserir os dados" + e);
 
 		}
 
@@ -62,7 +65,7 @@ public class DepositosDao {
 		modelo.addColumn("ID conta");
 		modelo.addColumn("Valor");
 		modelo.addColumn("Data e Hora");
-		modelo.addColumn("ID caixa");		
+		modelo.addColumn("ID caixa");
 
 		// Comando SQL
 		String sql = "SELECT * FROM depositos";
@@ -79,8 +82,8 @@ public class DepositosDao {
 			// Listando cursos
 			while (rs.next()) {
 
-				modelo.addRow(new Object[] { rs.getInt("id"), rs.getInt("idConta"), rs.getInt("valor"), rs.getString("dataHora"),
-						rs.getInt("idCaixa") });
+				modelo.addRow(new Object[] { rs.getInt("id"), rs.getInt("idConta"), rs.getInt("valor"),
+						rs.getString("dataHora"), rs.getInt("idCaixa") });
 			}
 
 			// Fechar a conexão
@@ -89,11 +92,51 @@ public class DepositosDao {
 		} catch (Exception e) {
 
 			// Caso haja falhas na seleção
-			JOptionPane.showMessageDialog(null, "Falha ao selecionar as agências.\n"+e);
+			JOptionPane.showMessageDialog(null, "Falha ao selecionar as agências.\n" + e);
 		}
 
 		// Retornar para o método
 		return modelo;
+
+	}
+
+	// Método para dados pelo ID
+	public DepositosBean obterInformacoesDoId(int idDeposito) {
+
+		// Criando um objeto da classe CursosBean
+		DepositosBean db = new DepositosBean();
+
+		// Comando SQL
+		String sql = "SELECT * FROM depositos WHERE id = ?";
+
+		// Tentar realizar o comando SQL
+		try {
+
+			// Enviando os parâmetros
+			PreparedStatement pstmt = this.conexao.prepareStatement(sql);
+			pstmt.setInt(1, idDeposito);
+
+			// Executando e retornando dados
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				db.setIdConta(rs.getInt("endereco"));
+				db.setIdCaixa(rs.getInt("id"));
+				db.setValorDepositado(rs.getDouble("nome"));
+			}
+
+			// Fechar a conexão
+			pstmt.close();
+
+		} catch (Exception e) {
+
+			// Caso haja falhas
+			JOptionPane.showMessageDialog(null, "Falha ao selecionar os dados" + e.getMessage());
+
+		}
+
+		// Retorno
+		return db;
 
 	}
 

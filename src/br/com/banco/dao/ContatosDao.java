@@ -27,7 +27,7 @@ public class ContatosDao {
 	public void cadastrarContatos(ContatosBean cb) {
 
 		// Comando SQL
-		String sql = "INSERT INTO agencias (idPessoa, contato) VALUES (?, ?)";
+		String sql = "INSERT INTO contatos (idPessoa, contato) VALUES (?, ?)";
 
 		// Tentar realizar o comando SQL
 		try {
@@ -40,6 +40,9 @@ public class ContatosDao {
 
 			// Fechar a conexão
 			pstmt.close();
+
+			// Aviso de cadastro
+			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "", 0);
 
 		} catch (Exception e) {
 
@@ -94,4 +97,43 @@ public class ContatosDao {
 
 	}
 
+	// Método para dados pelo ID
+	public ContatosBean obterInformacoesDoId(int idContatos) {
+
+		// Criando um objeto da classe CursosBean
+		ContatosBean cb = new ContatosBean();
+
+		// Comando SQL
+		String sql = "SELECT * FROM contatos WHERE id = ?";
+
+		// Tentar realizar o comando SQL
+		try {
+
+			// Enviando os parâmetros
+			PreparedStatement pstmt = this.conexao.prepareStatement(sql);
+			pstmt.setInt(1, idContatos);
+
+			// Executando e retornando dados
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				cb.setContato(rs.getString("contato"));
+				cb.setIdPessoa(rs.getInt("idPessoa"));
+
+			}
+
+			// Fechar a conexão
+			pstmt.close();
+
+		} catch (Exception e) {
+
+			// Caso haja falhas
+			JOptionPane.showMessageDialog(null, "Falha ao selecionar os dados" + e.getMessage());
+
+		}
+
+		// Retorno
+		return cb;
+
+	}
 }

@@ -3,6 +3,9 @@ package br.com.banco.view;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -62,6 +65,24 @@ public class DepositosView {
 
 		tabela = new JTable(dd.listarAgencias());
 
+		// Ação da tabela
+		tabela.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+
+				// Obter a linha selecionada
+				int linhaSelecionada = tabela.getSelectedRow();
+				int idDeposito = (int) tabela.getValueAt(linhaSelecionada, 0);
+
+				// Fechar esse formulário
+				construtor.dispose();
+
+				// Instanciar outro formulário
+				DepositosViewAlterar dvc = new DepositosViewAlterar(idDeposito);
+
+			}
+		});
+		
 		JScrollPane barra = new JScrollPane(tabela);
 		barra.setBounds(10, 180, 491, 159);
 		construtor.getContentPane().add(barra);
@@ -76,12 +97,26 @@ public class DepositosView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
+				// Instanciar tempo do registro
+				LocalDateTime tempo = LocalDateTime.now();
+
+				// Obter momento
+				int ano = tempo.getYear();
+				int mes = tempo.getMonthValue();
+				int dia = tempo.getDayOfMonth();
+
+				int horas = tempo.getHour();
+				int minutos = tempo.getMinute();
+				int segundos = tempo.getSecond();
+				
+				
 				// Obter dados
 				DepositosBean db = new DepositosBean();
 				db.setIdCaixa(Integer.parseInt(campoIdCaixa.getText()));
 				db.setIdConta(Integer.parseInt(campoIdConta.getText()));
 				db.setValorDepositado(Double.parseDouble(campoValor.getText()));
-
+				db.setDataHora(ano + "-" + mes + "-" + dia + " " + horas + ":" + minutos + ":" + segundos);
+				
 				// Enviar os dados
 				dd.cadastrarDepositos(db);
 

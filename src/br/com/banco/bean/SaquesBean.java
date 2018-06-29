@@ -4,7 +4,7 @@ public class SaquesBean {
 
 	private int id;
 	private int idConta;
-	private int valorSacado;
+	private double valorSacado;
 	private String dataEHora;
 	private int idCaixa;
 	
@@ -20,10 +20,10 @@ public class SaquesBean {
 	public void setIdConta(int idConta) {
 		this.idConta = idConta;
 	}
-	public int getValorSacado() {
+	public double getValorSacado() {
 		return valorSacado;
 	}
-	public void setValorSacado(int valorSacado) {
+	public void setValorSacado(double valorSacado) {
 		this.valorSacado = valorSacado;
 	}
 	public String getDataEHora() {
